@@ -29,6 +29,8 @@ def slopeIntercept(frame, lines):
     left_intercept = []
     right_intercept = []
 
+    drawingMask = np.zeros((720,1280,3), dtype=np.uint8)
+
     if lines is not None:
         for i in range(0, len(lines)):
             l = lines[i][0]
@@ -51,13 +53,12 @@ def slopeIntercept(frame, lines):
 
             left_slope_val = np.median(left_slope, axis=0)
             left_intercept_val = np.median(left_intercept, axis=0)
+            
             right_slope_val = np.median(right_slope, axis=0)
             right_intercept_val = np.median(right_intercept, axis=0)
 
 
-            #print("Slope: " + str(slope))
-
-        y11 = 300
+        y11 = 350 
         y22 = 719
 
         x11_left = (int)((y11 - left_intercept_val)/(left_slope_val))
@@ -66,8 +67,13 @@ def slopeIntercept(frame, lines):
         x11_right = (int)((y11 - right_intercept_val)/(right_slope_val))
         x22_right = (int)((y22 - right_intercept_val)/(right_slope_val))
 
-        cv2.line(frame, (x11_left, y11), (x22_left, y22), (0,0,255), 3, cv2.LINE_AA)
-        cv2.line(frame, (x11_right, y11), (x22_right, y22), (0,0,255), 3, cv2.LINE_AA)  
+        roadPolyPts = np.array([[x11_left, y11],[x22_left, y22],[x22_right, y22],[x11_right, y11]])
+        cv2.fillConvexPoly(drawingMask, roadPolyPts, (0,255,0))
+
+        cv2.line(frame, (x11_left, y11), (x22_left, y22), (0,255,255), 3, cv2.LINE_AA)
+        cv2.line(frame, (x11_right, y11), (x22_right, y22), (0,255,255), 3, cv2.LINE_AA)  
+
+        frame = cv2.addWeighted(frame, 1.0, drawingMask, 0.1, 0)
 
         return frame
 

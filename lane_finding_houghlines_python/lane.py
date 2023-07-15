@@ -9,6 +9,7 @@ frameCount = -1
 cap = cv2.VideoCapture("/home/abhishek/Videos/test2.mp4")
 pt_list = np.array([[259, 720],[507, 332],[634, 332],[1062, 720]])   # (col, row)
 
+#capOut = cv2.VideoWriter("/home/abhishek/Videos/road_houghLines.avi", cv2.VideoWriter_fourcc(*'MJPG'), 20, (1280, 720), True)
 
 while True:
     ret, frame = cap.read()
@@ -33,6 +34,9 @@ while True:
     displayOutput = display(frameGray, binaryImg, edgeImg, frame)
     cv2.putText(displayOutput, "Frame: " + str(frameCount), (20,20), 3, 0.5, (0,255,255))
 
+    #capOut.write(frame)
+    cv2.imshow("Frame", frame)
+
     key = cv2.waitKey(1)
 
     if (key == ord('p')):
@@ -41,9 +45,6 @@ while True:
     if(key == ord('q')):
         break
 
-
-    cv2.imshow("Frame", frame)
-    cv2.waitKey(1)
 
 
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Traffic App</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-container {
+            flex: 1;
+        }
+        .video-container {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .video-container img {
+            width: 1024px;
+            height: 576px;
+        }
+        .video-container h1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 0 0 5px 0;
+        }
+    </style>
+    <script>
+        function submitForm() {
+            document.getElementById('uploadForm').submit();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <!--<h1>Upload Video</h1> -->
+            <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" onchange="submitForm()">
+            </form>
+
+            <!--<h1>Reset Tracker</h1>-->
+            <form action="{{ url_for('reset_tracker') }}" method="post">
+                <input type="submit" value="Reset">
+            </form>
+        </div>
+
+        <div class="video-container">
+            {% if filename %}
+            <h1>Video Stream</h1>
+            <img id="videoStream" src="{{ url_for('video_feed', filename=filename) }}">
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
